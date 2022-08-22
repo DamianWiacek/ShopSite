@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace ShopSite.Entities
 {
-    public class DbContext
+    public class Product
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public double Price { get; set; }
+        
 
     }
 }
