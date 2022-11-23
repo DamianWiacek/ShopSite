@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShopSite.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,12 +21,18 @@ namespace ShopSite.Middleware
             {
                 await next.Invoke(context);
             }
+            catch(BadRequestException eee)
+            {
+                 context.Response.StatusCode = 400;
+                await context.Response.WriteAsync(eee.Message);
+            }
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
                 context.Response.StatusCode = 500;
                 await context.Response.WriteAsync("Something went wrong");
             }
+            
         }
     }
 }

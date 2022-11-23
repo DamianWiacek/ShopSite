@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShopSite.Entities;
 using ShopSite.Models;
@@ -19,12 +20,13 @@ namespace ShopSite.Controllers
         {
             _userService = userService;
         }
-
+            
         [HttpGet]
         public ActionResult<IEnumerable<UserDto>> GetAll()
         {
             return _userService.GetAll();
         }
+        
         [HttpGet("{id}")]
         public UserDto GetById([FromRoute] int id)
         {
@@ -50,6 +52,13 @@ namespace ShopSite.Controllers
                 return NoContent();
             }
             return NotFound();
+        }
+
+        [HttpPost("login")]
+        public ActionResult Login([FromBody]LoginDto loginDto)
+        {
+            string token = _userService.GenerateJwt(loginDto);
+            return Ok(token);
         }
 
     }

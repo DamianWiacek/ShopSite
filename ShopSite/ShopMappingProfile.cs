@@ -30,6 +30,9 @@ namespace ShopSite
                     HouseNumber = dto.HouseNumber,
                     Street = dto.Street
                 }));
+            CreateMap<NewProductDto, Product>();
+          
+                
 
         }
     }
