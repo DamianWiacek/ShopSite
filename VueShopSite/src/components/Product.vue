@@ -38,6 +38,8 @@ export default{
 img{
     height: 100px;
     width: 100px;
+    
+    
 }
 .left{
     flex-grow: 4;

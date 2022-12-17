@@ -5,43 +5,53 @@
             <img src="../assets/arrow-back.png" >
         </router-link>
         </div>
-        <form @submit="onSubmit">
+        <form @submit.prevent="onSubmit">
             <div class = "from-control" >
             <input type="email" placeholder="Email" v-model="email">
             </div>
             <div class = "from-control" >
-            <input type="text" placeholder="Password" v-model="password">
+            <input type="password" placeholder="Password" v-model="password">
             </div>
             <input type="submit" value="Login">
             
         </form>
-
+        <div v-if="loginError"> Zły e-mail lub hasło</div>
     </div>
+
 
 </template>
 
 <script>
+
+import axios from 'axios'
+
+
     export default {
         name:'login',
         data() {
             return {
-                id:0,
-                name:'',
-                surname:'',
                 email:'',
                 password:'',
-                confirmPassword:'',
-                age:0,
-                nationality:'',
-                street:'',
-                city:'',
-                country:'',
-                postalCode:'',
-                houseNumber:''
-
+                loginError : false
             }
             },
   methods: {
+    async onSubmit(){
+           try {
+            const res = await axios.post('https://localhost:5001/api/UserController/login',
+            {email:this.email,
+            password: this.password},
+            )
+            localStorage.token = res.data
+            const logedUser = await (await axios.get(`https://localhost:5001/api/UserController/${this.email}`)).data
+            localStorage.user = JSON.stringify(logedUser)
+           }
+           catch{
+             this.loginError = true
+           }
+            
+            
+        }
    
     }
 }
@@ -69,7 +79,7 @@ img{
 
 }
 form{
-    background-color: #f5fff7;
+    background-color:  rgb(245, 243, 243);
     height: 80%;
     width: 60%;
     margin-left: 100px;
@@ -78,7 +88,7 @@ form{
    padding: 10px; 
    text-align: center;
 }
-input[type =text],input[type =email]{
+input[type =password],input[type =email]{
     width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
