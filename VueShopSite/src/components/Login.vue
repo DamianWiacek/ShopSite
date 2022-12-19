@@ -1,5 +1,5 @@
 ﻿<template>
-       <div class="container">
+       <div class="container" >
         <router-link class="Login" to="/Login">Login</router-link>
         
 
@@ -18,13 +18,11 @@
     .container{
         padding: 15px;
         font-family: 'Trebuchet MS', sans-serif;
-        color:#1e563d;
+        cursor: pointer;
     }
     .Login{
         text-decoration: none;
-        color: #1b4332;
-        align-self: flex-end;
-        
+        color: #1b4332;       
     }
     
 </style>

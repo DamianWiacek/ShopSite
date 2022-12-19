@@ -27,10 +27,10 @@ namespace ShopSite.Controllers
             return _userService.GetAll();
         }
         
-        [HttpGet("{id}")]
-        public UserDto GetById([FromRoute] int id)
+        [HttpGet("{email}")]
+        public UserDto GetById([FromRoute] string email)
         {
-            return _userService.GetById(id);
+            return _userService.GetByEmail(email);
         }
         
         [HttpPost]

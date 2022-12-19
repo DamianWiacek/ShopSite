@@ -5,7 +5,7 @@
             <img src="../assets/arrow-back.png" >
         </router-link>
         </div>
-        <form @submit.prevent="onSubmit">
+        <form @submit="onSubmit">
             <div class = "from-control" >
             <input type="email" placeholder="Email" v-model="email">
             </div>

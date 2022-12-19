@@ -17,14 +17,11 @@
     .container{ 
         padding: 15px;
         font-family: 'Trebuchet MS', sans-serif;
-        color:#1e563d;
+        cursor: pointer;
     }
     .Register{
         text-decoration: none;
         color: #1b4332;
-        margin-left:900px;
-        align-self: flex-end;
-        
     }
     
 </style>

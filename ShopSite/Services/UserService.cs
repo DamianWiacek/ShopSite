@@ -17,7 +17,7 @@ namespace ShopSite.Services
 {
     public interface IUserService
     {
-        public UserDto GetById(int id);
+        public UserDto GetByEmail(string email);
         public List<UserDto> GetAll();
         public int Create(NewUserDto newUserDto);
         public bool Delete(int userId);
@@ -41,9 +41,9 @@ namespace ShopSite.Services
             _authenticationSettings = authenticationSettings;
         }
 
-        public UserDto GetById(int id)
+        public UserDto GetByEmail(string email)
         {
-            var user = _dbContext.Users.Include(r=>r.Adres).SingleOrDefault(x => x.Id == id);
+            var user = _dbContext.Users.Include(r=>r.Adres).SingleOrDefault(x => x.Email == email);
 
             if (user == null) return null;
             var result = _mapper.Map<UserDto>(user);

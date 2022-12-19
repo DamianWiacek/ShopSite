@@ -72,8 +72,7 @@
             }
             },
   methods: {
-    async onSubmit(e) {
-      e.preventDefault()
+    async onSubmit() {
       if (!this.name) {
         alert('Please add a name')
         return
@@ -128,7 +127,7 @@ img{
 
 }
 form{
-    background-color: #f5fff7;
+    background-color:  rgb(245, 243, 243);
     height: 80%;
     width: 60%;
     margin-left: 100px;
