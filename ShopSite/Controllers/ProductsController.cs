@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 namespace ShopSite.Controllers
 {
     [Route("api/ProductController")]
+    [ApiController]
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -21,47 +22,43 @@ namespace ShopSite.Controllers
         }
 
         [HttpGet("{id}")]
-        public Product GetById([FromRoute] int id)
+        public async Task<Product> GetById([FromRoute] int id)
         {
-            var product = _productService.GetById(id);
+            var product = await _productService.GetById(id);
             return product;
         }
         [HttpGet("category/{category}")]
-        public List<Product> GetByCategory([FromRoute] ProductCategory category)
+        public async Task<List<Product>> GetByCategory([FromRoute] ProductCategory category)
         {
-            var products = _productService.GetByCategory(category);
+            var products = await _productService.GetByCategory(category);
             return products;
         }
         [HttpGet("name/{name}")]
-        public List<Product> GetByName([FromRoute] string name)
+        public async Task<List<Product>> GetByName([FromRoute] string name)
         {
-            var products = _productService.GetByName(name);
+            var products = await _productService.GetByName(name);
             return products;
         }
 
         [HttpGet]
-        public List<Product> GetAll()
+        public async Task<List<Product>> GetAll()
         {
-            var products = _productService.GetAll();
+            var products = await _productService.GetAll();
             return products;
         }
 
         [HttpPost]
-        public ActionResult AddNewProduct([FromBody]NewProductDto newProduct)
+        public async Task<ActionResult> AddNewProduct([FromBody]NewProductDto newProduct)
         {
-            
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var id = _productService.AddNewProduct(newProduct);
+                        
+            var id = await _productService.AddNewProduct(newProduct);
             return Created($"/api/ProductsController/{id}", null);
         }
      
         [HttpDelete("{id}")]
-        public ActionResult DeleteProduct([FromRoute] int id)
+        public async Task<ActionResult> DeleteProduct([FromRoute] int id)
         {
-            var isDeleted = _productService.Delete(id);
+            var isDeleted = await _productService.Delete(id);
             if (isDeleted)
             {
                 return NoContent();

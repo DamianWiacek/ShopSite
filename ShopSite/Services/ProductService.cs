@@ -14,11 +14,11 @@ namespace ShopSite.Services
     {
         public Product GetById(int id);
 
-        public List<Product> GetByName(string name);
-        public bool Delete(int id);
-        public List<Product> GetByCategory(ProductCategory category);
-        public List<Product> GetAll();
-        public int AddNewProduct(NewProductDto product);
+        public Task<List<Product>> GetByName(string name);
+        public Task<bool> Delete(int id);
+        public Task<List<Product>> GetByCategory(ProductCategory category);
+        public Task<List<Product>> GetAll();
+        public Task<int> AddNewProduct(NewProductDto product);
 
     }
     public class ProductService : IProductService
@@ -32,18 +32,18 @@ namespace ShopSite.Services
              
         }
 
-        public Product GetById(int id)
+        public async Task<Product> GetById(int id)
         {
-            var product = _dbContext.Products.SingleOrDefault(p => p.Id == id);
+            var product = await _dbContext.Products.SingleOrDefaultAsync(p => p.Id == id);
 
             if (product == null) return null;
             return product;
         }
-        public List<Product> GetByName(string name)
+        public async Task<List<Product>> GetByName(string name)
         {
             var products = _dbContext.Products.Where(x=>x.Name.Contains(name)).ToList();
             if (products == null) return null;
-            return products;
+            return await Task.FromResult(products);
         }
 
         public List<Product> GetAll()
