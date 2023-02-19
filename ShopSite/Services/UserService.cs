@@ -17,11 +17,11 @@ namespace ShopSite.Services
 {
     public interface IUserService
     {
-        public UserDto GetByEmail(string email);
-        public List<UserDto> GetAll();
-        public int Create(NewUserDto newUserDto);
-        public bool Delete(int userId);
-        public string GenerateJwt(LoginDto loginDto);
+        public Task<UserDto> GetByEmail(string email);
+        public Task<List<UserDto>> GetAll();
+        public Task<int> Create(NewUserDto newUserDto);
+        public Task<bool> Delete(int userId);
+        public Task<string> GenerateJwt(LoginDto loginDto);
 
     }
     public class UserService : IUserService
@@ -41,53 +41,53 @@ namespace ShopSite.Services
             _authenticationSettings = authenticationSettings;
         }
 
-        public UserDto GetByEmail(string email)
+        public async Task<UserDto> GetByEmail(string email)
         {
-            var user = _dbContext.Users.Include(r=>r.Adres).SingleOrDefault(x => x.Email == email);
+            var user = await _dbContext.Users.Include(r=>r.Adres).SingleOrDefaultAsync(x => x.Email == email);
 
             if (user == null) return null;
             var result = _mapper.Map<UserDto>(user);
             return result; 
         }
 
-        public List<UserDto> GetAll()
+        public async Task<List<UserDto>> GetAll()
         {
-            var users = _dbContext.Users.Include(r=>r.Adres).ToList();
+            var users = await _dbContext.Users.Include(r=>r.Adres).ToListAsync();
 
             var result = _mapper.Map<List<UserDto>>(users);
             return result;
         }
 
-        public int Create(NewUserDto newUserDto)
+        public async Task<int> Create(NewUserDto newUserDto)
         {
             var newUser = _mapper.Map<User>(newUserDto);
+
             var hashedPasswd = _passwordHasher.HashPassword(newUser, newUserDto.Password);
             newUser.PasswordHash = hashedPasswd;
-            _dbContext.Users.Add(newUser);
-            _dbContext.SaveChanges();
+
+            await _dbContext.Users.AddAsync(newUser);
+            await _dbContext.SaveChangesAsync();
             
-
-
             return newUser.Id;
 
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var user = _dbContext.Users.Include(r => r.Adres).SingleOrDefault(x => x.Id == id);
+            var user = await _dbContext.Users.Include(r => r.Adres).SingleOrDefaultAsync(x => x.Id == id);
             if (user == null)
             {
                 return false;
             }
             _dbContext.Remove(user);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
             return true;
             
         }
 
-        public string GenerateJwt(LoginDto loginDto)
+        public async Task<string> GenerateJwt(LoginDto loginDto)
         {
-            var user = _dbContext.Users.Include(x=>x.Role).FirstOrDefault(x => x.Email == loginDto.Email);
+            var user = await _dbContext.Users.Include(x=>x.Role).FirstOrDefaultAsync(x => x.Email == loginDto.Email);
             if (user == null)
             {
                 throw new BadRequestException("Invalid username or password");

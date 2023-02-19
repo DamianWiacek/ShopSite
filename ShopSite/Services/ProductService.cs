@@ -12,8 +12,7 @@ namespace ShopSite.Services
 {
     public interface IProductService
     {
-        public Product GetById(int id);
-
+        public Task<Product> GetById(int id);
         public Task<List<Product>> GetByName(string name);
         public Task<bool> Delete(int id);
         public Task<List<Product>> GetByCategory(ProductCategory category);
@@ -41,41 +40,41 @@ namespace ShopSite.Services
         }
         public async Task<List<Product>> GetByName(string name)
         {
-            var products = _dbContext.Products.Where(x=>x.Name.Contains(name)).ToList();
-            if (products == null) return null;
-            return await Task.FromResult(products);
-        }
-
-        public List<Product> GetAll()
-        {
-            var products = _dbContext.Products.ToList();
+            var products = await _dbContext.Products.Where(x=>x.Name.Contains(name)).ToListAsync();
             if (products == null) return null;
             return products;
         }
 
-        public List<Product> GetByCategory(ProductCategory category)
+        public async Task<List<Product>> GetAll()
         {
-            var products = _dbContext.Products.Where(p => p.Category == category).ToList();
+            var products = await _dbContext.Products.ToListAsync();
+            if (products == null) return null;
+            return products;
+        }
+
+        public async Task<List<Product>> GetByCategory(ProductCategory category)
+        {
+            var products = await _dbContext.Products.Where(p => p.Category == category).ToListAsync();
             if (products.Count == 0) return null;
             return products;
         }
 
-        public int AddNewProduct(NewProductDto product)
+        public async Task<int> AddNewProduct(NewProductDto product)
         {
             var newProduct = _mapper.Map<Product>(product);
-            _dbContext.Products.Add(newProduct);
-            _dbContext.SaveChanges();
+            await _dbContext.Products.AddAsync(newProduct);
+            await _dbContext.SaveChangesAsync();
             return newProduct.Id;
         }
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var product = _dbContext.Products.SingleOrDefault(x => x.Id == id);
+            var product = await _dbContext.Products.SingleOrDefaultAsync(x => x.Id == id);
             if (product == null)
             {
                 return false;
             }
             _dbContext.Remove(product);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
             return true;
 
         }
