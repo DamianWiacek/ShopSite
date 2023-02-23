@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using ShopSite.Entities;
 using ShopSite.Exceptions;
 using ShopSite.Models;
+using ShopSite.Repositories;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,21 +21,21 @@ namespace ShopSite.Services
         public Task<UserDto> GetByEmail(string email);
         public Task<List<UserDto>> GetAll();
         public Task<int> Create(NewUserDto newUserDto);
-        public Task<bool> Delete(int userId);
+        public Task Delete(int userId);
         public Task<string> GenerateJwt(LoginDto loginDto);
 
     }
     public class UserService : IUserService
     {
-        private readonly ShopDbContext _dbContext;
+        private readonly IUserRepository _repository;
         private readonly IMapper _mapper;
         private readonly ILogger<UserService> _logger;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly AuthenticationSettings _authenticationSettings;
 
-        public UserService(ShopDbContext dbContext, IMapper mapper, ILogger<UserService> logger, IPasswordHasher<User> passwordHasher, AuthenticationSettings authenticationSettings)
+        public UserService(IUserRepository repository, IMapper mapper, ILogger<UserService> logger, IPasswordHasher<User> passwordHasher, AuthenticationSettings authenticationSettings)
         {
-            _dbContext = dbContext;
+            _repository = repository;
             _mapper = mapper;
             _logger = logger;
             _passwordHasher = passwordHasher;
@@ -43,7 +44,7 @@ namespace ShopSite.Services
 
         public async Task<UserDto> GetByEmail(string email)
         {
-            var user = await _dbContext.Users.Include(r=>r.Adres).SingleOrDefaultAsync(x => x.Email == email);
+            var user = await _repository.GetByEmail(email);
 
             if (user == null) return null;
             var result = _mapper.Map<UserDto>(user);
@@ -52,7 +53,7 @@ namespace ShopSite.Services
 
         public async Task<List<UserDto>> GetAll()
         {
-            var users = await _dbContext.Users.Include(r=>r.Adres).ToListAsync();
+            var users = await _repository.GetAll();
 
             var result = _mapper.Map<List<UserDto>>(users);
             return result;
@@ -65,29 +66,21 @@ namespace ShopSite.Services
             var hashedPasswd = _passwordHasher.HashPassword(newUser, newUserDto.Password);
             newUser.PasswordHash = hashedPasswd;
 
-            await _dbContext.Users.AddAsync(newUser);
-            await _dbContext.SaveChangesAsync();
+            await _repository.Create(newUser);
             
             return newUser.Id;
 
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task Delete(int id)
         {
-            var user = await _dbContext.Users.Include(r => r.Adres).SingleOrDefaultAsync(x => x.Id == id);
-            if (user == null)
-            {
-                return false;
-            }
-            _dbContext.Remove(user);
-            await _dbContext.SaveChangesAsync();
-            return true;
+            _repository.Delete(id);
             
         }
 
         public async Task<string> GenerateJwt(LoginDto loginDto)
         {
-            var user = await _dbContext.Users.Include(x=>x.Role).FirstOrDefaultAsync(x => x.Email == loginDto.Email);
+            var user = await _repository.GetUserFromLoginDto(loginDto);
             if (user == null)
             {
                 throw new BadRequestException("Invalid username or password");

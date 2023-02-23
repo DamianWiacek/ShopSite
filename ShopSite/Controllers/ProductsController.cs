@@ -58,11 +58,7 @@ namespace ShopSite.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteProduct([FromRoute] int id)
         {
-            var isDeleted = await _productService.Delete(id);
-            if (isDeleted)
-            {
-                return NoContent();
-            }
+            await _productService.Delete(id);
             return NotFound();
         }
        

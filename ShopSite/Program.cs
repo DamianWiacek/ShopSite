@@ -9,6 +9,8 @@ using ShopSite.Models.Validators;
 using FluentValidation.AspNetCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Reflection;
+using ShopSite.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +39,8 @@ builder.Services.AddDbContext<ShopDbContext>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPasswordHasher<User>,PasswordHasher<User>>();
 builder.Services.AddScoped<ExceptionHandlingMiddleware>();
 builder.Services.AddScoped<IValidator<NewUserDto>,NewUserDtoValidator>();
