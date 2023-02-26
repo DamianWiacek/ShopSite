@@ -33,6 +33,9 @@ namespace ShopSite
                 }));
             CreateMap<NewProductDto, Product>();
             CreateMap<OrderDetailsDto, OrderDetails>();
+            CreateMap<OrderDetails, OrderDetailsDto>();
+            CreateMap<Order,OrderDto>();
+           
                 
                 
           

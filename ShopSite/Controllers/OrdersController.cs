@@ -22,12 +22,27 @@ namespace ShopSite.Controllers
             _orderService = orderService;
         }
 
-        [HttpPost]
+        [HttpPost("/AddProductsToOrder")]
         public async Task<ActionResult> AddProductsToOrder([FromBody] OrderDetailsDto orderDetailsDto)
         {
-            await _orderService.AddProductsToOrder(orderDetailsDto);
-            return Ok();
+            var id = await _orderService.AddProductsToOrder(orderDetailsDto);
+            return Created($"/api/OrdersController/GetAllOrderDetails/{id}", null);
         }
-
+        [HttpPost("/CreateNewOrder/{userId}")]
+        public async Task<ActionResult> CreateOrder([FromRoute] int userId)
+        {
+            var id = await _orderService.CreateNewOrder(userId);
+            return Created($"/api/OrdersController/GetOrder/{id}", null);
+        }
+        [HttpGet("GetAllOrderDetails/{id}")]
+        public async Task<List<OrderDetailsDto>> GetAllOrderDetails([FromRoute]int id)
+        {
+            return await _orderService.GetAllOrderDetails(id);
+        }
+        [HttpGet("GetOrder/{id}")]
+        public async Task<OrderDto> GetOrder([FromRoute] int id)
+        {
+            return await _orderService.GetOrder(id);
+        }
     }
 }

@@ -63,7 +63,7 @@ namespace ShopSite.Services
         public async Task<int> AddNewProduct(NewProductDto product)
         {
             var newProduct = _mapper.Map<Product>(product);
-            _repository.AddNewProduct(newProduct);
+            await _repository.AddNewProduct(newProduct);
             return newProduct.Id;
         }
         public async Task Delete(int id)

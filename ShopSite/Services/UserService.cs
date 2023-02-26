@@ -74,7 +74,7 @@ namespace ShopSite.Services
 
         public async Task Delete(int id)
         {
-            _repository.Delete(id);
+            await _repository.Delete(id);
             
         }
 
