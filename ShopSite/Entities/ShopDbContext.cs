@@ -14,7 +14,7 @@ namespace ShopSite.Entities
         public DbSet<Order> Orders { get; set; }
 
         public DbSet<Adres> Adreses { get; set; }
-
+        public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<User> Users  { get; set; }
         public DbSet<Role> Roles { get; set; }
 

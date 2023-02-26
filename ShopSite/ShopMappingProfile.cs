@@ -19,6 +19,7 @@ namespace ShopSite
                 .ForMember(u => u.Country, m => m.MapFrom(s => s.Adres.Country))
                 .ForMember(u => u.PostalCode, m => m.MapFrom(s => s.Adres.PostalCode))
                 .ForMember(u => u.HouseNumber, m => m.MapFrom(s => s.Adres.HouseNumber));
+                
 
             CreateMap<NewUserDto, User>()
                 .ForMember(r => r.Adres,
@@ -31,7 +32,11 @@ namespace ShopSite
                     Street = dto.Street
                 }));
             CreateMap<NewProductDto, Product>();
+            CreateMap<OrderDetailsDto, OrderDetails>();
+                
+                
           
+            
                 
 
         }

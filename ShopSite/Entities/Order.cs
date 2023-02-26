@@ -9,12 +9,11 @@ namespace ShopSite.Entities
     public class Order
     {
         public int Id { get; set; }
-        public string OrderName { get; set; }
         public int UserId { get; set; }
-        public virtual User User { get; set; }
 
-        public virtual List<Product>? Products { get; set; }
-       
+        public virtual User User { get; set; }
+        public virtual List<OrderDetails> OrderDetails { get; set; }
+
 
     }
 }
