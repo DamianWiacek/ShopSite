@@ -42,14 +42,14 @@ namespace ShopSite.Services
         public async Task<List<Product>> GetByName(string name)
         {
             var products = await _repository.GetByName(name);
-            if (products == null) return null;
+            if (products.Count == 0) return null;
             return products;
         }
 
         public async Task<List<Product>> GetAll()
         {
             var products = await _repository.GetAll();
-            if (products == null) return null;
+            if (products.Count == 0) return null;
             return products;
         }
 
