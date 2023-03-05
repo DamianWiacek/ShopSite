@@ -24,12 +24,14 @@ namespace ShopSite.Controllers
         }
             
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetAll()
         {
             return await _userService.GetAll();
         }
         
         [HttpGet("{email}")]
+        [Authorize(Roles = "Admin")]
         public async Task<UserDto> GetById([FromRoute] string email)
         {
             return await _userService.GetByEmail(email);
@@ -43,6 +45,7 @@ namespace ShopSite.Controllers
             return Created($"/api/UserController/{id}",null);
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteUser([FromRoute] int id)
         {
             await _userService.Delete(id);

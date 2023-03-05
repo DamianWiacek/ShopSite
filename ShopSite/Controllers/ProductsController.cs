@@ -22,6 +22,7 @@ namespace ShopSite.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Customer")]
         public async Task<Product> GetById([FromRoute] int id)
         {
             var product = await _productService.GetById(id);
@@ -34,6 +35,7 @@ namespace ShopSite.Controllers
             return products;
         }
         [HttpGet("name/{name}")]
+        [Authorize(Roles = "Customer")]
         public async Task<List<Product>> GetByName([FromRoute] string name)
         {
             var products = await _productService.GetByName(name);
@@ -41,6 +43,7 @@ namespace ShopSite.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Customer")]
         public async Task<List<Product>> GetAll()
         {
             var products = await _productService.GetAll();
@@ -48,6 +51,7 @@ namespace ShopSite.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> AddNewProduct([FromBody]NewProductDto newProduct)
         {
                         
@@ -56,6 +60,7 @@ namespace ShopSite.Controllers
         }
      
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteProduct([FromRoute] int id)
         {
             await _productService.Delete(id);
