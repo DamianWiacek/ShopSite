@@ -9,5 +9,21 @@
 - .Net6
 - Ms Sql Server
 - Vue.js
-- EF Core
+- EntityFrameworkCore
+- AutoMapper
+- JwtBearer
 - XUnit
+- Moq
+
+## Features
+<font size="3" Administrator:</font>
+- Add products to offer
+- Delete products from offer
+- Delete user account
+
+<font size="3" User:</font>
+- Register
+- Login
+- Browse products by category
+- Search for product by its name
+- Order products
