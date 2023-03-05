@@ -16,12 +16,12 @@
 - Moq
 
 ## Features
-<font size="5"> **  Administrator: ** </font>
+<font size="5"> Administrator: </font>
 - Add products to offer
 - Delete products from offer
 - Delete user account
 
-<font size="5"> ** User: ** </font>
+<font size="5"> User: </font>
 - Register
 - Login
 - Browse products by category
