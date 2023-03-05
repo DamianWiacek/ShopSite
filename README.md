@@ -9,6 +9,7 @@
 - .Net6
 - Ms Sql Server
 - Vue.js
+- Bootstrap 5
 - EntityFrameworkCore
 - AutoMapper
 - JwtBearer
